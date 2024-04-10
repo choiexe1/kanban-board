@@ -10,7 +10,9 @@ import validationSchema from './validation-schema';
       envFilePath:
         process.env.NODE_ENV == 'dev'
           ? path.join(process.cwd(), '/.env.dev')
-          : path.join(process.cwd(), '/.env.prod'),
+          : process.env.NODE_ENV == 'test'
+            ? path.join(process.cwd(), '/.env.test')
+            : path.join(process.cwd(), '/.env.prod'),
       validationSchema,
     }),
   ],
