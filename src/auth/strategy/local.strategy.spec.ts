@@ -7,6 +7,10 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from 'src/user/entity/user.entity';
 import { BadRequestException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ConfigServiceMock } from 'src/configuration/config.service.mock';
+import { JwtService } from 'src/jwt/jwt.service';
+import { JwtModule } from '@nestjs/jwt';
 
 describe('LocalStrategy', () => {
   let localStrategy: LocalStrategy;
@@ -17,6 +21,7 @@ describe('LocalStrategy', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [JwtModule],
       providers: [
         LocalStrategy,
         AuthService,
@@ -26,6 +31,11 @@ describe('LocalStrategy', () => {
           provide: userRepositoryToken,
           useClass: Repository,
         },
+        {
+          provide: ConfigService,
+          useValue: ConfigServiceMock,
+        },
+        JwtService,
       ],
     }).compile();
 

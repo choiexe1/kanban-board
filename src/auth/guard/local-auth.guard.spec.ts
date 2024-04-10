@@ -9,6 +9,10 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
 import { BcryptService } from 'src/bcrypt/bcrypt.service';
+import { JwtService } from 'src/jwt/jwt.service';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { ConfigServiceMock } from 'src/configuration/config.service.mock';
 
 describe('LocalAuthGuard', () => {
   let localAuthGuard: LocalAuthGuard;
@@ -17,6 +21,7 @@ describe('LocalAuthGuard', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [JwtModule],
       providers: [
         LocalAuthGuard,
         LocalStrategy,
@@ -25,6 +30,11 @@ describe('LocalAuthGuard', () => {
         {
           provide: userRepositoryToken,
           useClass: Repository,
+        },
+        JwtService,
+        {
+          provide: ConfigService,
+          useValue: ConfigServiceMock,
         },
         BcryptService,
       ],

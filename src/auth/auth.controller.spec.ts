@@ -7,6 +7,10 @@ import { Repository } from 'typeorm';
 import { User } from 'src/user/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UnprocessableEntityException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ConfigServiceMock } from 'src/configuration/config.service.mock';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtService } from 'src/jwt/jwt.service';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -17,6 +21,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [JwtModule],
       controllers: [AuthController],
       providers: [
         AuthService,
@@ -26,6 +31,11 @@ describe('AuthController', () => {
           provide: userRepositoryToken,
           useClass: Repository,
         },
+        {
+          provide: ConfigService,
+          useValue: ConfigServiceMock,
+        },
+        JwtService,
       ],
     }).compile();
 
@@ -81,6 +91,7 @@ describe('AuthController', () => {
     });
   });
 
+  // TODO: 유닛 테스트 작성
   describe('POST /login', () => {
     it('', async () => {});
   });

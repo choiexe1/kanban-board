@@ -9,6 +9,10 @@ import {
   BadRequestException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { JwtService } from 'src/jwt/jwt.service';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { ConfigServiceMock } from 'src/configuration/config.service.mock';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -19,6 +23,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [JwtModule],
       providers: [
         AuthService,
         BcryptService,
@@ -27,6 +32,8 @@ describe('AuthService', () => {
           provide: userRepositoryToken,
           useClass: Repository,
         },
+        JwtService,
+        { provide: ConfigService, useValue: ConfigServiceMock },
       ],
     }).compile();
 
@@ -44,7 +51,7 @@ describe('AuthService', () => {
   });
 
   describe('signUp', () => {
-    it('If the username is not being used, should be create a user', async () => {
+    it('If the username is not being used, should be create a user and return', async () => {
       // Arrange
       const newUser = {
         username: 'test1234',
@@ -96,7 +103,6 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    // TODO: JWT 토큰 작업
     it('If the user exists and the password matches, you should return a Access Token and Refresh Token.', async () => {
       // Arrange
       const user = {
@@ -114,7 +120,6 @@ describe('AuthService', () => {
       const result = await authService.login(user.username, user.password);
 
       // Assert
-      // TODO: 현재 Token 반환 검증 안함, 추후 작업
       expect(result).toBe(Object.assign(user, { id: 1 }));
     });
 

@@ -4,10 +4,15 @@ import { LocalAuthGuard } from './guard/local-auth.guard';
 import { User } from 'src/user/entity/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { CurrentUser } from 'src/shared/CurrentUser.decorator';
+import { JwtService } from 'src/jwt/jwt.service';
+import { TokenPayload } from 'src/jwt/token-payload.interface';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   @Post('/signup')
   async signUp(@Body() dto: SignUpDto) {
@@ -18,5 +23,12 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  login(@CurrentUser() user: User) {}
+  login(@CurrentUser() user: User) {
+    const payload: TokenPayload = {
+      id: user.id,
+      username: user.username,
+    };
+
+    return { accessToken: this.jwtService.generateAccessToken(payload) };
+  }
 }
