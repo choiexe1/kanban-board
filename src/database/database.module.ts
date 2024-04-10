@@ -11,7 +11,7 @@ import { join } from 'node:path';
       useFactory: (cfg: ConfigService) => ({
         type: 'postgres',
         host: cfg.get('DATABASE_HOST'),
-        port: cfg.get('DATABASE_PORT'),
+        port: cfg.get<number>('DATABASE_PORT'),
         username: cfg.get('DATABASE_USER'),
         password: cfg.get('DATABASE_PASSWORD'),
         database: cfg.get('DATABASE_NAME'),
