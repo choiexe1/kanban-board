@@ -1,6 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import { BcryptService } from 'src/bcrypt/bcrypt.service';
 
@@ -30,6 +30,12 @@ export class UserService {
 
     return await this.userRepository.findOneBy({
       username,
+    });
+  }
+
+  async findOne(where: FindOptionsWhere<User>): Promise<User> | null {
+    return await this.userRepository.findOne({
+      where,
     });
   }
 }
