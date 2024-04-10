@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as path from 'node:path';
+import validationSchema from './validation-schema';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import * as path from 'node:path';
         process.env.NODE_ENV == 'dev'
           ? path.join(process.cwd(), '/.env.dev')
           : path.join(process.cwd(), '/.env.prod'),
+      validationSchema,
     }),
   ],
 })
