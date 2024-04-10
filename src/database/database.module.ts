@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'node:path';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: cfg.get('DATABASE_USER'),
         password: cfg.get('DATABASE_PASSWORD'),
         database: cfg.get('DATABASE_NAME'),
-        autoLoadEntities: true,
+        entities: [join(__dirname, '/../**/*.entity.*')],
+        synchronize: cfg.get('NODE_ENV') == 'dev' ? true : false,
       }),
     }),
   ],
