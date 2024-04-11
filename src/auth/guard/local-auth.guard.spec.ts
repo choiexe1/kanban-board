@@ -1,6 +1,6 @@
 import { TestingModule, Test } from '@nestjs/testing';
 import { BadRequestException, ExecutionContext } from '@nestjs/common';
-import { LocalAuthGuard } from './local-auth.guard';
+import { LocalGuard } from './local-auth.guard';
 import { createMock } from '@golevelup/ts-jest';
 import { LocalStrategy } from '../strategy/local.strategy';
 import { AuthService } from '../auth.service';
@@ -14,8 +14,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ConfigServiceMock } from 'src/configuration/config.service.mock';
 
-describe('LocalAuthGuard', () => {
-  let localAuthGuard: LocalAuthGuard;
+describe('LocalGuard', () => {
+  let localAuthGuard: LocalGuard;
   let authService: AuthService;
   const userRepositoryToken = getRepositoryToken(User);
 
@@ -23,7 +23,7 @@ describe('LocalAuthGuard', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [JwtModule],
       providers: [
-        LocalAuthGuard,
+        LocalGuard,
         LocalStrategy,
         AuthService,
         UserService,
@@ -40,7 +40,7 @@ describe('LocalAuthGuard', () => {
       ],
     }).compile();
 
-    localAuthGuard = module.get<LocalAuthGuard>(LocalAuthGuard);
+    localAuthGuard = module.get<LocalGuard>(LocalGuard);
     authService = module.get<AuthService>(AuthService);
   });
 

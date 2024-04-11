@@ -22,4 +22,6 @@ describe('AppController (e2e)', () => {
   it('/ (GET)', () => {
     return request(app.getHttpServer()).get('/').expect(404);
   });
+
+  // TODO: signUp, login E2E 테스트 작성
 });

@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guard/local-auth.guard';
+import { LocalGuard } from './guard/local-auth.guard';
 import { User } from 'src/user/entity/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { CurrentUser } from 'src/shared/CurrentUser.decorator';
@@ -21,7 +21,7 @@ export class AuthController {
     return await this.authService.signUp(username, password);
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalGuard)
   @Post('/login')
   login(@CurrentUser() user: User) {
     const payload: TokenPayload = {
