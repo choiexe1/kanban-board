@@ -1,10 +1,16 @@
 # 칸반보드 프로젝트
 
+![kanban.gif](./docs/kanban.gif)
+
+> 칸반보드 UI 예시이며 실제 프로젝트는 이것을 기반으로 만들어진 Restful API 입니다.
+
+프로젝트 및 작업 관리를 위한 팀 간 협업과 업무 효율성을 향상 시키는데 널리 사용되는 칸반보드 시스템을 `NestJS`와 `TypeORM`을 이용하여 구현 하였습니다.
+
+데이터베이스는 [Supabase](https://supabase.com/)의 무료 제공 PostgreSQL을 사용 했습니다.
+
 ### 데이터 모델링
 
-- [관계형 데이터베이스 개념적 설계 ERD](./docs/칸반보드_개념_ERD.webp)
-
-- [관계형 데이터베이스 논리적 설계 ERD](./docs/칸반보드_논리_ERD.webp)
+- [관계형 데이터베이스 설계 살펴보기](./docs/Design_RDB.md)
 
 ### 테스트 자동화
 
