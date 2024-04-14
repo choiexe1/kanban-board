@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'node:path';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { join } from 'node:path';
         password: cfg.get('DATABASE_PASSWORD'),
         database: cfg.get('DATABASE_NAME'),
         entities: [join(__dirname, '/../**/*.entity.*')],
-        synchronize: cfg.get('NODE_ENV') == 'dev' ? true : false,
+        synchronize: cfg.get('NODE_ENV') == 'dev' ? false : false,
+        namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
   ],

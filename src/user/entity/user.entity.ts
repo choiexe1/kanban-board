@@ -8,4 +8,7 @@ export class User extends BaseEntity {
 
   @Column({ length: 60 })
   password: string;
+
+  @Column({})
+  refreshToken: string;
 }
