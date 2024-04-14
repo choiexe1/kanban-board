@@ -6,11 +6,13 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { CurrentUser } from 'src/shared/CurrentUser.decorator';
 import { JwtService } from 'src/jwt/jwt.service';
 import { TokenPayload } from 'src/jwt/token-payload.interface';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -23,12 +25,20 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('/login')
-  login(@CurrentUser() user: User) {
+  async login(@CurrentUser() user: User) {
     const payload: TokenPayload = {
       id: user.id,
       username: user.username,
     };
 
-    return { accessToken: this.jwtService.generateAccessToken(payload) };
+    const accessToken = this.jwtService.generateAccessToken(payload);
+    const refreshToken = this.jwtService.generateRefreshToken(payload);
+
+    await this.userService.update({ id: user.id }, { refreshToken });
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 }
