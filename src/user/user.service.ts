@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import { BcryptService } from 'src/bcrypt/bcrypt.service';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class UserService {
@@ -37,5 +38,15 @@ export class UserService {
     return await this.userRepository.findOne({
       where,
     });
+  }
+
+  async update(
+    where: FindOptionsWhere<User>,
+    partial: QueryDeepPartialEntity<User>,
+  ): Promise<boolean> {
+    const user = await this.findOne(where);
+    const query = await this.userRepository.update(user.id, partial);
+
+    return query.affected === 1;
   }
 }

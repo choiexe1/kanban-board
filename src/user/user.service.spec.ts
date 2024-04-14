@@ -90,5 +90,34 @@ describe('UserService', () => {
           await userService.create(newUser.username, newUser.password),
       ).rejects.toThrow(UnprocessableEntityException);
     });
+
+    it('Some properties of the user should be updated to match the input and return true', async () => {
+      // Arrange
+      const user = {
+        username: 'test1234',
+        password: 'test1234',
+      };
+
+      userRepository.findOne = jest.fn().mockResolvedValue({
+        username: user.username,
+        password: user.password,
+        refreshToken: null,
+      });
+
+      userRepository.update = jest.fn().mockResolvedValue({
+        affected: 1,
+      });
+
+      // Act
+      const result = await userService.update(
+        {
+          username: user.username,
+        },
+        { refreshToken: 'abc' },
+      );
+
+      // Assert
+      expect(result).toEqual(true);
+    });
   });
 });
