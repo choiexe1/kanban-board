@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guard/local-auth.guard';
 import { User } from 'src/user/entity/user.entity';
@@ -9,6 +16,7 @@ import { TokenPayload } from 'src/jwt/token-payload.interface';
 import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
