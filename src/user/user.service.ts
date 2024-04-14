@@ -49,4 +49,13 @@ export class UserService {
 
     return query.affected === 1;
   }
+
+  async delete(user: User) {
+    const exist = await this.userRepository.existsBy({ id: user.id });
+
+    if (exist) {
+      const query = await this.userRepository.delete(user.id);
+      return query.affected === 1;
+    }
+  }
 }

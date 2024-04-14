@@ -90,7 +90,9 @@ describe('UserService', () => {
           await userService.create(newUser.username, newUser.password),
       ).rejects.toThrow(UnprocessableEntityException);
     });
+  });
 
+  describe('update', () => {
     it('Some properties of the user should be updated to match the input and return true', async () => {
       // Arrange
       const user = {
@@ -115,6 +117,31 @@ describe('UserService', () => {
         },
         { refreshToken: 'abc' },
       );
+
+      // Assert
+      expect(result).toEqual(true);
+    });
+  });
+
+  describe('delete', () => {
+    it('user should be deleted.', async () => {
+      // Arrange
+      const user: User = {
+        id: 1,
+        username: 'test1234',
+        password: 'test1234',
+        refreshToken: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      userRepository.existsBy = jest.fn().mockResolvedValue(true);
+      userRepository.delete = jest.fn().mockResolvedValue({
+        affected: 1,
+      });
+
+      // Act
+      const result = await userService.delete(user);
 
       // Assert
       expect(result).toEqual(true);
