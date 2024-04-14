@@ -6,10 +6,17 @@ import { LocalStrategy } from './strategy/local.strategy';
 import { BcryptService } from 'src/bcrypt/bcrypt.service';
 import { JwtService } from 'src/jwt/jwt.service';
 import { JwtModule } from '@nestjs/jwt';
+import { AtStrategy } from './strategy/access-token.strategy';
 
 @Module({
   imports: [UserModule, JwtModule],
   controllers: [AuthController],
-  providers: [AuthService, BcryptService, LocalStrategy, JwtService],
+  providers: [
+    AuthService,
+    BcryptService,
+    LocalStrategy,
+    JwtService,
+    AtStrategy,
+  ],
 })
 export class AuthModule {}
