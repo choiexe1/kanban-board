@@ -17,7 +17,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
         password: cfg.get('DATABASE_PASSWORD'),
         database: cfg.get('DATABASE_NAME'),
         entities: [join(__dirname, '/../**/*.entity.*')],
-        synchronize: cfg.get('NODE_ENV') == 'dev' ? false : false,
+        synchronize: false,
         namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
