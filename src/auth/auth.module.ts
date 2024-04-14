@@ -7,6 +7,7 @@ import { BcryptService } from 'src/bcrypt/bcrypt.service';
 import { JwtService } from 'src/jwt/jwt.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AtStrategy } from './strategy/access-token.strategy';
+import { RtStrategy } from './strategy/refresh-token.strategy';
 
 @Module({
   imports: [UserModule, JwtModule],
@@ -17,6 +18,7 @@ import { AtStrategy } from './strategy/access-token.strategy';
     LocalStrategy,
     JwtService,
     AtStrategy,
+    RtStrategy,
   ],
 })
 export class AuthModule {}

@@ -181,7 +181,7 @@ describe('App (e2e)', () => {
     };
 
     let accessToken: string;
-    let refreshToken: string;
+    // let refreshToken: string;
 
     beforeAll(async () => {
       const login = await request(app.getHttpServer())
@@ -189,7 +189,7 @@ describe('App (e2e)', () => {
         .send(loginDto);
 
       accessToken = login.body.data.accessToken;
-      refreshToken = login.body.data.refreshToken;
+      // refreshToken = login.body.data.refreshToken;
     });
 
     describe('(DELETE)', () => {
