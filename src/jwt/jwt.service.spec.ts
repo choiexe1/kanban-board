@@ -31,7 +31,7 @@ describe('JwtService', () => {
   });
 
   describe('generateAccessToken', () => {
-    it('should return JWT', () => {
+    it('should return access token', () => {
       // Arrange
       const payload: TokenPayload = {
         id: 1,
@@ -44,74 +44,164 @@ describe('JwtService', () => {
       // Assert
       expect(result).toBeTruthy();
     });
+  });
 
-    it('should return true if token is valid', () => {
+  describe('generateRefreshToken', () => {
+    it('should return refresh token', () => {
       // Arrange
       const payload: TokenPayload = {
         id: 1,
         username: 'test1234',
       };
 
-      const accessToken = jwtService.generateAccessToken(payload);
-
       // Act
-      const result = jwtService.verify(accessToken, {
-        secret: 'test',
-      });
+      const result = jwtService.generateRefreshToken(payload);
 
       // Assert
       expect(result).toBeTruthy();
     });
+  });
 
-    it('should throw an error if token is malformed', () => {
-      // Arrange
-      const accessToken = 'asuadriasudf0zxcv';
+  describe('verify', () => {
+    describe('access token', () => {
+      it('should return true if access token is valid', () => {
+        // Arrange
+        const payload: TokenPayload = {
+          id: 1,
+          username: 'test1234',
+        };
 
-      // Act
-      // Assert
-      expect(async () =>
-        jwtService.verify(accessToken, {
+        const accessToken = jwtService.generateAccessToken(payload);
+
+        // Act
+        const result = jwtService.verify(accessToken, {
           secret: 'test',
-        }),
-      ).rejects.toThrow(new JsonWebTokenError('jwt malformed'));
+        });
+
+        // Assert
+        expect(result).toBeTruthy();
+      });
+
+      it('should throw an error if token is malformed', () => {
+        // Arrange
+        const accessToken = 'asuadriasudf0zxcv';
+
+        // Act
+        // Assert
+        expect(async () =>
+          jwtService.verify(accessToken, {
+            secret: 'test',
+          }),
+        ).rejects.toThrow(new JsonWebTokenError('jwt malformed'));
+      });
+
+      it('should throw an error if token is expired', () => {
+        // Arrange
+        const payload: TokenPayload = {
+          id: 1,
+          username: 'test1234',
+        };
+
+        const accessToken = jwtService.generateAccessToken(payload);
+
+        jest.useFakeTimers();
+        jest.advanceTimersByTime(86400000);
+
+        // Act
+        // Assert
+        expect(() =>
+          jwtService.verify(accessToken, {
+            secret: 'test',
+          }),
+        ).toThrow(new JsonWebTokenError('jwt expired'));
+      });
+
+      it('should throw an error if token signature is difference', () => {
+        // Arrange
+        const payload: TokenPayload = {
+          id: 1,
+          username: 'test1234',
+        };
+
+        const accessToken = jwtService.generateAccessToken(payload);
+        // Act
+        // Assert
+        expect(() =>
+          jwtService.verify(accessToken, {
+            secret: 'asdfasdf',
+          }),
+        ).toThrow(new JsonWebTokenError('invalid signature'));
+      });
     });
+    describe('refresh token', () => {
+      it('should return true if refresh token is valid', () => {
+        // Arrange
+        const payload: TokenPayload = {
+          id: 1,
+          username: 'test1234',
+        };
 
-    it('should throw an error if token is expired', () => {
-      // Arrange
-      const payload: TokenPayload = {
-        id: 1,
-        username: 'test1234',
-      };
+        const refreshToken = jwtService.generateRefreshToken(payload);
 
-      const accessToken = jwtService.generateAccessToken(payload);
+        // Act
+        const result = jwtService.verify(refreshToken, {
+          secret: 'test_refresh',
+        });
 
-      jest.useFakeTimers();
-      jest.advanceTimersByTime(86400000);
+        // Assert
+        expect(result).toBeTruthy();
+      });
 
-      // Act
-      // Assert
-      expect(() =>
-        jwtService.verify(accessToken, {
-          secret: 'test',
-        }),
-      ).toThrow(new JsonWebTokenError('jwt expired'));
-    });
+      it('should throw an error if token is malformed', () => {
+        // Arrange
+        const accessToken = 'asuadriasudf0zxcv';
 
-    it('should throw an error if token signature is difference', () => {
-      // Arrange
-      const payload: TokenPayload = {
-        id: 1,
-        username: 'test1234',
-      };
+        // Act
+        // Assert
+        expect(async () =>
+          jwtService.verify(accessToken, {
+            secret: 'test_refresh',
+          }),
+        ).rejects.toThrow(new JsonWebTokenError('jwt malformed'));
+      });
 
-      const accessToken = jwtService.generateAccessToken(payload);
-      // Act
-      // Assert
-      expect(() =>
-        jwtService.verify(accessToken, {
-          secret: 'asdfasdf',
-        }),
-      ).toThrow(new JsonWebTokenError('invalid signature'));
+      it('should throw an error if token is expired', () => {
+        // Arrange
+        const payload: TokenPayload = {
+          id: 1,
+          username: 'test1234',
+        };
+
+        const accessToken = jwtService.generateRefreshToken(payload);
+
+        jest.useFakeTimers();
+        jest.advanceTimersByTime(604800000);
+
+        // Act
+        // Assert
+        expect(() =>
+          jwtService.verify(accessToken, {
+            secret: 'test_refresh',
+          }),
+        ).toThrow(new JsonWebTokenError('jwt expired'));
+      });
+
+      it('should throw an error if token signature is difference', () => {
+        // Arrange
+        const payload: TokenPayload = {
+          id: 1,
+          username: 'test1234',
+        };
+
+        const accessToken = jwtService.generateRefreshToken(payload);
+        // Act
+        // Assert
+        expect(() =>
+          jwtService.verify(accessToken, {
+            secret: 'asdfasdf',
+          }),
+        ).toThrow(new JsonWebTokenError('invalid signature'));
+      });
     });
   });
 });

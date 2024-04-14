@@ -17,6 +17,13 @@ export class JwtService {
     });
   }
 
+  generateRefreshToken(payload: TokenPayload) {
+    return this.jwt.sign(payload, {
+      secret: this.config.get('JWT_REFRESH_SECRET'),
+      expiresIn: this.config.get<number>('JWT_REFRESH_EXPIRES_IN') + 'd',
+    });
+  }
+
   verify(token: string, option: JwtVerifyOptions) {
     return this.jwt.verify(token, option);
   }
