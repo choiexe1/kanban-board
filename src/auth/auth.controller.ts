@@ -10,11 +10,11 @@ import { AuthService } from './auth.service';
 import { LocalGuard } from './guard/local-auth.guard';
 import { User } from 'src/user/entity/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
-import { CurrentUser } from 'src/shared/CurrentUser.decorator';
 import { JwtService } from 'src/jwt/jwt.service';
 import { TokenPayload } from 'src/jwt/token-payload.interface';
 import { UserService } from 'src/user/user.service';
 import { RtGuard } from './guard/refresh-token.guard';
+import { CurrentUser } from 'src/shared/current-user.decorator';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
