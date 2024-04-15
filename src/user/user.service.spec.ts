@@ -126,7 +126,7 @@ describe('UserService', () => {
   describe('delete', () => {
     it('user should be deleted.', async () => {
       // Arrange
-      const user: User = {
+      const user = {
         id: 1,
         username: 'test1234',
         password: 'test1234',
@@ -141,7 +141,7 @@ describe('UserService', () => {
       });
 
       // Act
-      const result = await userService.delete(user);
+      const result = await userService.delete(user.id);
 
       // Assert
       expect(result).toEqual(true);

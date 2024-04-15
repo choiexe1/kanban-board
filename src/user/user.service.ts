@@ -50,11 +50,11 @@ export class UserService {
     return query.affected === 1;
   }
 
-  async delete(user: User) {
-    const exist = await this.userRepository.existsBy({ id: user.id });
+  async delete(userId: number) {
+    const exist = await this.userRepository.existsBy({ id: userId });
 
     if (exist) {
-      const query = await this.userRepository.delete(user.id);
+      const query = await this.userRepository.delete(userId);
       return query.affected === 1;
     }
   }
