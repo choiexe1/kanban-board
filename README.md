@@ -10,6 +10,23 @@
 
 ## 프로젝트 개요
 
+### 플로우 차트
+
+간략하게 작성한 플로우 차트입니다.
+
+```mermaid
+flowchart LR
+    start[시작] --> isUser{회원인가?}
+    isUser -->|YES| login[로그인]
+    isUser -->|NO| signup[회원가입]
+    login -->|YES| hasOwnTeam{팀을 소유중인가?} & isTeamExist{소속된 팀이 있는가?}
+    hasOwnTeam -->|YES| invite[팀원 초대]
+    hasOwnTeam & isTeamExist -->|YES| isExistColumn{컬럼이 존재하는가?}
+    isExistColumn -->|NO| createColumn[컬럼 생성]
+    isExistColumn -->|YES| createTicket[티켓 생성]
+    signup --->E[종료]
+```
+
 ### 데이터 모델링
 
 관계형 데이터베이스 모델링을 통하여 데이터베이스 구조를 설계 하였습니다.

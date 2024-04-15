@@ -13,7 +13,7 @@ export class AuthService {
     return await this.userService.create(username, password);
   }
 
-  async login(username: string, password: string): Promise<any> {
+  async login(username: string, password: string) {
     const user = await this.userService.findOne({
       username,
     });
